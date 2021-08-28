@@ -1,4 +1,4 @@
-# _**# SpringBoot后台架构 -- 架构师之路-从搭建环境开始**_<br>
+# _**# SpringBoot后台结构说明**_<br>
 
 # **项目环境说明** <br>
 * JDK8+ <BR>
@@ -9,7 +9,7 @@
 # **项目结构说明** 
 * root：主模块，用于集成环境，便于其他模块使用<br>
 * common-base:用于编写可公用的模块如：<br>
-    - tool:日期封装
+    - tool: 工具类
     - result: 返回格式封装.格式为json格式。<br>
          {
           ”code“:Int,<br>
