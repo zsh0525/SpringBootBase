@@ -29,6 +29,7 @@
     <properties>
         <java.version>1.8</java.version>
         <common.version>1.0-SNAPSHOT</common.version>
+        <swagger-base.version>2.9.2</swagger-base.version>
     </properties>
 
     <dependencies>

@@ -1,0 +1,12 @@
+swagger:
+  enable: true
+  path: /
+  basePackage: com.zsh.www.controller
+  title: springBootBaseApi
+  version: 0.0.1
+  contact: zsh,www.zsh.com,479113908@qq.com
+  contact3:
+    - zsh3
+    - www.zsh.com
+    - 479113908@qq.com
+  description: Swagger测试Demo

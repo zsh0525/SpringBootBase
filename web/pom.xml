@@ -12,11 +12,35 @@
     <artifactId>web</artifactId>
     <packaging>jar</packaging>
     <dependencies>
+        <!--  引入common-base模块      -->
         <dependency>
             <groupId>com.zsh</groupId>
             <artifactId>common-base</artifactId>
             <version>${common.version}</version>
             <scope>compile</scope>
+        </dependency>
+        <!--           引入swagger2-->
+        <!--        <dependency>-->
+        <!--            <groupId>io.springfox</groupId>-->
+        <!--            <artifactId>springfox-swagger2</artifactId>-->
+        <!--            <version>${swagger-base.version}</version>-->
+        <!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>io.springfox</groupId>-->
+        <!--            <artifactId>springfox-swagger-ui</artifactId>-->
+        <!--            <version>${swagger-base.version}</version>-->
+        <!--        </dependency>-->
+        <!-- 引入Swagger3       -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-boot-starter</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+        <!--  引入第三方swaggerUI ，不喜欢换这里 -->
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>swagger-bootstrap-ui</artifactId>
+            <version>1.8.5</version>
         </dependency>
     </dependencies>
 </project>
