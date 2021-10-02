@@ -10,3 +10,16 @@ swagger:
     - www.zsh.com
     - 479113908@qq.com
   description: Swagger测试Demo
+
+
+log:
+  name: webLog
+  # 日志文件所在目录，注意本地和部署环境。若用命令执行的，可在启动时赋值 ，如：--log.home = XXXXX
+  # ${当前项目下}
+  path: ${user.home}
+
+server:
+  port: 8005
+#logging:
+#  # 自定义配置文件路径。
+#  config: classpath:log-config/logback-spring.xml #

@@ -1,0 +1,2 @@
+log:
+  config: classpath:log-config/logback-spring.xml # 该模块不使用log4j2

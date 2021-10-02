@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--scanPeriod:设置监测配置文件是否有修改的时间间隔，如果没有给出时间单位，默认单位是毫秒。当scan为true时，此属性生效。默认的时间间隔为1分钟。-->
+<!--debug:当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为false。-->
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <springProperty scope="context" name="LOG_NAME" source="log.name"/>
+    <springProperty scope="context" name="LOG_DIR" source="log.path"/>
+    <contextName>${LOG_NAME}</contextName>
+    <!-- 加载默认配置文件   -->
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <jmxConfigurator/>
+    <!--  logger用来配置在哪些容器中打印 ，打印web（请求信息）环境下的信息 -->
+    <logger name="org.springframework.web" level="INFO"/>
+    <logger name="com.springboot.in.action" level="TRACE"/>
+<!--    logger用来配置在哪些容器中打印 ，打印web环境下的信息-->
+    <logger name="org.apache.velocity.runtime.log" level="INFO"/>
+    <!-- 定义规则，以下按天生成错误文件，也可按大小生成，具体实现见官网配置吧(http://logback.qos.ch/documentation.html)-->
+    <appender name="dailyRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--  文件存放目录      -->
+        <File>${LOG_DIR}/${LOG_NAME}/logs/error</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 日志格式 -->
+            <FileNamePattern>%d{yyyy-MM-dd}.log</FileNamePattern>
+            <!-- 保存时间,若超出则删除最旧的文件。生成最新的文件 -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <encoder>
+            <!--  日志格式 ，官方格式，若需要改成其他的，改这-->
+            <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg %n</Pattern>
+        </encoder>
+    </appender>
+
+    <!--TRACE, DEBUG, INFO, WARN, ERROR-->
+    <root level="DEBUG">
+        <!--  控制台打印       -->
+<!--        <appender-ref ref="CONSOLE"/>-->
+        <!--  生成文件  -->
+        <appender-ref ref="dailyRollingFileAppender"/>
+    </root>
+
+
+</configuration>
+
+
