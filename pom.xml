@@ -55,6 +55,17 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+        <!--  省略setter丶getter方法      -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!--  aop包   -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

@@ -5,41 +5,96 @@
     <springProperty scope="context" name="LOG_NAME" source="log.name"/>
     <springProperty scope="context" name="LOG_DIR" source="log.path"/>
     <contextName>${LOG_NAME}</contextName>
-    <!-- 加载默认配置文件   -->
-    <include resource="org/springframework/boot/logging/logback/base.xml"/>
-    <jmxConfigurator/>
+<!--    &lt;!&ndash; 加载默认配置文件   &ndash;&gt;-->
+<!--    <include resource="org/springframework/boot/logging/logback/base.xml"/>-->
+<!--    <jmxConfigurator/>-->
     <!--  logger用来配置在哪些容器中打印 ，打印web（请求信息）环境下的信息 -->
-    <logger name="org.springframework.web" level="INFO"/>
-    <logger name="com.springboot.in.action" level="TRACE"/>
-<!--    logger用来配置在哪些容器中打印 ，打印web环境下的信息-->
-    <logger name="org.apache.velocity.runtime.log" level="INFO"/>
-    <!-- 定义规则，以下按天生成错误文件，也可按大小生成，具体实现见官网配置吧(http://logback.qos.ch/documentation.html)-->
-    <appender name="dailyRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+<!--    <logger name="org.springframework.web" level="INFO"/>-->
+<!--&lt;!&ndash;&lt;!&ndash;    logger用来配置在哪些容器中打印 ，打印web环境下的信息&ndash;&gt;&ndash;&gt;-->
+<!--    <logger name="org.apache.velocity.runtime.log" level="INFO"/>-->
+
+    <!--  控制台输出  -->
+    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <Pattern>%red(%d{HH:mm:ss.SSS}) %green([%thread]) %highlight(%-5level) %boldMagenta(%logger{35}) -%line - %cyan(%msg %n)</Pattern>
+        </encoder>
+    </appender>
+
+
+    <appender name="fileAppender" class="ch.qos.logback.core.FileAppender">
+        <File>${LOG_DIR}/${LOG_NAME}/logs/all.log</File>
+        <append>true</append>
+        <encoder>
+            <Pattern>%red(%d{HH:mm:ss.SSS}) %green([%thread]) %highlight(%-5level) %boldMagenta(%logger{60}) - %cyan(%msg %n)</Pattern>
+        </encoder>
+    </appender>
+
+<!--    &lt;!&ndash; 其他定义规则，以下按天生成错误文件，也可按大小生成，具体实现见官网配置吧(http://logback.qos.ch/documentation.html)&ndash;&gt;-->
+    <appender name="errorLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!--  文件存放目录      -->
-        <File>${LOG_DIR}/${LOG_NAME}/logs/error</File>
+        <File>${LOG_DIR}/${LOG_NAME}/logs/error/error.log</File>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- 日志格式 -->
-            <FileNamePattern>%d{yyyy-MM-dd}.log</FileNamePattern>
+            <FileNamePattern>error%d{yyyy-MM-dd}.log</FileNamePattern>
             <!-- 保存时间,若超出则删除最旧的文件。生成最新的文件 -->
             <maxHistory>30</maxHistory>
         </rollingPolicy>
+        <!--    指定什么入库    -->
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>ERROR</level>
         </filter>
         <encoder>
             <!--  日志格式 ，官方格式，若需要改成其他的，改这-->
-            <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg %n</Pattern>
+            <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{60} - %msg %n</Pattern>
+            <charset>UTF-8</charset>
         </encoder>
     </appender>
 
-    <!--TRACE, DEBUG, INFO, WARN, ERROR-->
-    <root level="DEBUG">
-        <!--  控制台打印       -->
-<!--        <appender-ref ref="CONSOLE"/>-->
-        <!--  生成文件  -->
-        <appender-ref ref="dailyRollingFileAppender"/>
-    </root>
+    <appender name="infoLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--  文件存放目录      -->
+        <File>${LOG_DIR}/${LOG_NAME}/logs/info/info.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 日志格式 -->
+            <FileNamePattern>info%d{yyyy-MM-dd}.log</FileNamePattern>
+            <!-- 保存时间,若超出则删除最旧的文件。生成最新的文件 -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <!--    指定什么入库    -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <encoder>
+            <!--  日志格式 ，官方格式，若需要改成其他的，改这-->
+            <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{60} - %msg %n</Pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
 
+    <!-- 异步输出日志   -->
+    <appender name="asyncError" class="ch.qos.logback.classic.AsyncAppender">
+        <!--  是否丢失日志，默认为1，如果队列80%满了，则会丢失级别较低的日志TRACT,DEBUG,INFO.      -->
+        <discardingThreshold>0</discardingThreshold>
+        <!--  队列的最大深度      -->
+        <queueSize>256</queueSize>
+        <appender-ref ref="errorLog"/>
+    </appender>
+
+    <!--  开发  -->
+    <springProfile name="dev">
+        <!--TRACE, DEBUG, INFO, WARN, ERROR-->
+        <root level="INFO">
+            <appender-ref ref="consoleAppender"/>
+            <appender-ref ref="fileAppender"/>
+        </root>
+    </springProfile>
+
+    <!--  正式  -->
+    <springProfile name="prod">
+        <root level="INTO">
+            <appender-ref ref="infoLog"/>
+            <appender-ref ref="asyncError"/>
+        </root>
+    </springProfile>
 
 </configuration>
 
