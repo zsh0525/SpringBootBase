@@ -30,7 +30,7 @@
           ”code“:Int,<br>
           "msg":String,<br>
           payload:对象
-          }
+          } 
     * web: 服务模块（接口）编写，MVC结构。目前为测试说明<br>
         - controller：控制层
         - dao: 数据库层
