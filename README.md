@@ -43,7 +43,7 @@
             - swagger： swagger2和swagger3配置文件
         - aop: 切面层
             - WebLogAspect: 日志切面，用于打印请求信息.具体见注释
-        
+       
 # **项目资源说明** 
 * web/resources
     - log-config:
