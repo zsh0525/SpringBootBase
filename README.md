@@ -1,5 +1,5 @@
 # _**# SpringBoot（多模块单应用）说明**_<br>
- 该示例项目集成了最基本的Web开发架构技术，里面含控制层丶服务层丶切面示例丶拦截器示例丶测试用例（如何测接口丶如何测服务）、支持生成环境的日志配置丶swagger配置丶一系列常见的工具类 <br><font color=red> **仅供学习和参考**
+ 该示例项目集成了最基本的Web开发架构技术，里面含控制层丶服务层丶数据层（注：该示例使用mysql数据库，若启动报错，请初始化web/resource/sql目录下的脚本，修改yml中的连接地址）丶切面示例丶拦截器示例丶测试用例（如何测接口丶如何测服务）、支持生成环境的日志配置丶swagger配置丶一系列常见的工具类 <br><font color=red> **仅供学习和参考**
 
 # **项目环境说明** <br>
 * JDK8+ <BR>
@@ -7,6 +7,8 @@
 * Maven 3.6.5 <br>
 * junit 4.13.2 <br>
 * aop 2.5.4 <br>
+* mybatis <br>
+* mybatis-plus  <br>
 * lombok 1.18.2 <br>
 * swagger2 2.9.2（使用人最多） 和 swagger3 3.0.0<br>
    - 两者区别：
@@ -25,12 +27,13 @@
 * root：主模块，用于集成环境，便于其他模块使用<br>
     * common-base:用于编写可公用的模块如：<br>
         - tool: 工具类
+            - DateTools: 采用多态，封装了一些常用的日期用法，
         - result: 返回格式封装.格式为json格式。<br>
          {
           ”code“:Int,<br>
           "msg":String,<br>
           payload:对象
-          } 
+          }
     * web: 服务模块（接口）编写，MVC结构。目前为测试说明<br>
         - controller：控制层
         - dao: 数据库层
@@ -55,3 +58,8 @@
         - application-dev.yml 开发环境用到的相关配置信息
         - application-prod.yml 正式环境用到的相关配置信息
         - application-test.yml 测试环境用到的相关配置信息
+    - mapper: 存放mapper文件目录
+    
+    - sql: 存放sql脚本文件目录，用于初始化一些数据。这里为测试数据。若不需要则不需要。
+    
+    
