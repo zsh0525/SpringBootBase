@@ -8,7 +8,7 @@ import java.util.Date;
 
 /**
  * @author zsh
- * @description 日期工具类 常规写法.不想自己写可使用第三方工具包(common-util)github自行选择
+ * @description 日期工具类 返回字符串的，统一转换为localDateTime类型(多态写法，少些代码吧)。不想自己写可使用第三方工具包(common-util)github自行选择
  * @date 2021/10/27
  */
 public class DateTools {
@@ -37,91 +37,113 @@ public class DateTools {
         return dateToString(LocalDate.now(), format);
     }
 
+    /**
+     * @param localDate LocalDate类型
+     * @param format    转换格式
+     * @return 日期字符串类型
+     */
     public static String dateToString(LocalDate localDate, String format) {
-        return localDateFormat(localDate, format);
+        return dateToString(format(localDate, format), format);
     }
 
-    public static String dateToString(LocalDateTime localDate, String format) {
-        return localDateTimeFormat(localDate, format);
+    /**
+     * @param localDateTime LocalDateTime类型
+     * @param format        转换格式
+     * @return 日期字符串类型
+     */
+    public static String dateToString(LocalDateTime localDateTime, String format) {
+        return localDateTimeFormat(localDateTime, format);
     }
 
+    /**
+     * @param date   date类型
+     * @param format 转换格式
+     * @return 日期字符串类型
+     */
     public static String dateToString(Date date, String format) {
-        LocalDateTime localDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-        return dateToString(localDateTime, format);
+        return dateToString(format(date), format);
     }
 
-    public static String localDateFormat(LocalDate localDate, String format) {
-        return pattern(format).format(localDate);
-    }
-
-    public static LocalDate localDateFormat(String localDate, String format) {
-        return LocalDate.parse(localDate, pattern(format));
-    }
-
-    public static LocalDateTime localDateTimeFormat(String localDateTime, String format) {
-        return LocalDateTime.parse(localDateTime, pattern(format));
-    }
-
+    /**
+     * @param localDateTime LocalDateTime类型
+     * @param format        转换格式
+     * @return 日期字符串类型
+     */
     public static String localDateTimeFormat(LocalDateTime localDateTime, String format) {
         return localDateTime.format(pattern(format));
     }
 
     /**
-     * @param date   字符串日期
+     * @param localDateTime LocalDateTime 类型的字符串
+     * @param format        转换格式
+     * @return LocalTime
+     */
+    public static LocalDateTime localDateTimeFormat(String localDateTime, String format) {
+        return LocalDateTime.parse(localDateTime, pattern(format));
+    }
+
+    /**
+     * @param localDate localDate类型的字符串
+     * @return LocalDate
+     */
+    public static LocalDate dateFormat(String localDate) {
+        return LocalDate.parse(localDate, pattern(DATE_FORMAT));
+    }
+
+    /**
+     * @param date   date类型的字符串
      * @param format 转换格式
-     * @return 返回日期格式
+     * @return Date类型
      */
     public static Date dateFormat(String date, String format) {
-        return null;
+        return format(localDateTimeFormat(date, format));
     }
 
     /**
-     * @param date   日期
-     * @param format 转换格式
-     * @return 返回string字符串
+     * @param localDate LocalDate类型
+     * @return Date类型
      */
-    public static String dateFormat(Date date, String format) {
-        return localDateFormat(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate(), format);
+    public static Date format(LocalDate localDate) {
+        return Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
     }
 
     /**
-     * @param timestamp 时间戳
+     * @param localDateTime LocalDateTime类型
+     * @return Date类型
+     */
+    public static Date format(LocalDateTime localDateTime) {
+        return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+    }
+
+    /**
+     * @param date 日期类型
+     * @return LocalDateTime
+     */
+    public static LocalDateTime format(Date date) {
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+    }
+
+    /**
+     * @param localDate LocalDate类型
      * @param format    转换格式
-     * @return 返回string字符串
+     * @return LocalDateTime
      */
-    public static String timestampFormat(long timestamp, String format) {
-        return null;
+    public static LocalDateTime format(LocalDate localDate, String format) {
+        return format(format(localDate));
     }
 
-    /**
-     * @param timestamp timestamp 时间戳
-     * @param format    format 转换格式
-     * @return 返回date日期
-     */
-    public static Date timestampToDate(long timestamp, String format) {
-        return null;
-    }
-
-
-    /**
-     * @param date   日期（字符串）
-     * @param format 转换格式
-     * @return 时间戳
-     */
-    public static long timestampFormat(String date, String format) {
-        return DateTools.dateToTimestamp(null, null);
-    }
-
-    /**
-     * @param date   日期
-     * @param format 转换格式
-     * @return 时间戳
-     */
-    public static long dateToTimestamp(Date date, String format) {
-        return 0;
-    }
 
     public static DateTimeFormatter pattern(String format) {
         return DateTimeFormatter.ofPattern(format);
+    }
+
+    public static void main(String[] args) {
+        Date date = new Date();
+        System.out.println(date);
+        LocalDate localDate = LocalDate.now();
+        LocalDateTime localDateTime = LocalDateTime.now();
+        System.out.println(DateTools.dateToString(date, "yyyy-MM-dd"));
+        System.out.println(DateTools.dateToString(localDate, DateTools.DATE_FORMAT));
+        System.out.println(DateTools.dateFormat(DateTools.dateToString(localDateTime, DateTools.DATE_FORMAT)));
     }
 }
